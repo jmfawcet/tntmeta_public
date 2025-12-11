@@ -320,6 +320,11 @@ saveRDS(nt_ip_con_down, 'models/cumulative_meta_ip_con_down.rds')
 
 # ip Cumulative Meta-analysis Plot ----------------------------------------
 
+nt_ip_unc_up = readRDS('models/cumulative_meta_ip_unc_up.rds')
+nt_ip_unc_down = readRDS('models/cumulative_meta_ip_unc_down.rds')
+nt_ip_con_up = readRDS('models/cumulative_meta_ip_con_up.rds')
+nt_ip_con_down = readRDS('models/cumulative_meta_ip_con_down.rds')
+
 nt_ip_unc_up %>%
   mutate(steplab='Small to Large') %>%
   bind_rows(nt_ip_unc_down %>% mutate(steplab='Large to Small')) %>%

@@ -94,6 +94,8 @@ nt_sp_unc_inc_clin <- brm(yi | se(sei) ~ 1 + (1|id) + (1|es_id),
                         data = temp, iter = 20000, cores = 8,
                         prior=c(rm_priors), control=list(adapt_delta=.99, max_treedepth=15))
 
+summarize_agg_and_PI(nt_sp_unc_inc_clin, temp_sd, label = "NT-SP Unconditionalized Recall (Clinical)")
+
 # Conditionalized
 temp = nt_sp_dat %>% 
   filter(repetitions==max_rep, is_conditionalized!='no', dv=='recall') %>%
@@ -107,6 +109,8 @@ nt_sp_cond_inc_clin <- brm(yi | se(sei) ~ 1 + (1|id) + (1|es_id),
                          backend='cmdstanr',
                          data = temp, iter = 20000, cores = 8,
                          prior=c(rm_priors), control=list(adapt_delta=.99, max_treedepth=15))
+
+summarize_agg_and_PI(nt_sp_cond_inc_clin, temp_sd, label = "NT-SP Conditionalized Recall (Clinical)")
 
 # IP Models estimating the effect ignoring is_clinical -----------------------
 
@@ -124,6 +128,7 @@ nt_ip_unc_inc_clin <- brm(yi | se(sei) ~ 1 + (1|id) + (1|es_id),
                         data = temp, iter = 20000, cores = 8,
                         prior=c(rm_priors), control=list(adapt_delta=.99, max_treedepth=15))
 
+summarize_agg_and_PI(nt_ip_unc_inc_clin, temp_sd, label = "NT-IP Unconditionalized Recall (Clinical)")
 
 # Conditionalized
 temp = nt_ip_dat %>% 
@@ -139,4 +144,5 @@ nt_ip_cond_inc_clin <- brm(yi | se(sei) ~ 1 + (1|id) + (1|es_id),
                          data = temp, iter = 20000, cores = 8,
                          prior=c(rm_priors), control=list(adapt_delta=.99, max_treedepth=15))
 
+summarize_agg_and_PI(nt_ip_cond_inc_clin, temp_sd, label = "NT-IP Conditionalized Recall (Clinical)")
 

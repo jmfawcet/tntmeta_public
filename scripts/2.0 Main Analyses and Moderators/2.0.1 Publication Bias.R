@@ -1,4 +1,4 @@
-source('scripts/Final Scripts/1.0 Process Data.R')
+source('scripts/1.0 Process Data.R')
 
 # All publication models are separated based on test type (SP vs IP) and conditionalization (unconditionalized vs conditionalized) of the data. 
 # This means for all tests of publication bias 4 models were run
@@ -84,7 +84,7 @@ nt_sp_unc_pub_N = brm(bf(yi | se(sei) ~ scale(n) + (1|id) + (1|new_id)),
                       prior=c(rm_priors, rm_b_priors), 
                       file = 'models/nt_sp_unc_bias_N', file_refit = "on_change")
 
-hypothesis(nt_sp_unc_pub_N, 'scalen > 0') #Test of confidence in the direction of the relationship
+hypothesis(nt_sp_unc_pub_N, 'scalen < 0') #Test of confidence in the direction of the relationship
 
 funnel(temp$yi, sei=temp$sei, ni=temp$n, yaxis='ni') #Produces funnel plot for visual inspection to supplement statistical models.
 
