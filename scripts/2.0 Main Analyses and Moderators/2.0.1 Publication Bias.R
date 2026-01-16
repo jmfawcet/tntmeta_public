@@ -275,6 +275,8 @@ summary(results)
 
 #RoBMA models----
 
+#Models are included for both unstandardized and standardized SIF effects.
+
 library(RoBMA) #Open RoBMA package
 
 
@@ -285,34 +287,52 @@ temp <- nt_sp_dat %>%
 
 # Run the model
 
-fit <- RoBMA(d = temp$yi_s, 
-             se = temp$sei_s, 
-             study_names = temp$plot_citation,
-             seed = 1,
-             priors_effect_null = NULL,
-             priors_heterogeneity_null = NULL, 
-             priors_effect = prior("normal", 
-                                   parameters = list(mean = 0, 
-                                                     sd = 0.5)),
-             priors_heterogeneity = prior("normal", 
-                                          parameters = list(mean = 0, 
-                                                            sd = 0.25)),
-             priors_bias = list(
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1), 
-                                                      steps = c(0.05))),
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1, 1), 
-                                                      steps = c(0.05, 0.1)))),
-             autofit_control = set_autofit_control(max_Rhat = 1.01,
-                                                   min_ESS = 1000,
-                                                   sample_extend = 1e4),
-             convergence_checks = set_convergence_checks(max_Rhat = 1.01,
-                                                         min_ESS = 1000),
-             parallel = TRUE)
+# Standardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi_s), 
+  se = temp$sei_s, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.3)),
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.25)),
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
 
 summary(fit) #Checks the general results of the ROBMA model
-summary(fit, type = 'model') #Checks the specific results of the ROBMA models we are interested in
+interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
+
+# Unstandardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi), 
+  se = temp$sei, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 5)), # example
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 2.5)), # example
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
+
+summary(fit) #Checks the general results of the ROBMA model
 interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
 
 # SP Conditionalized
@@ -322,34 +342,52 @@ temp <- nt_sp_dat %>%
 
 # Run the model
 
-fit <- RoBMA(d = temp$yi_s, 
-             se = temp$sei_s, 
-             study_names = temp$plot_citation,
-             seed = 1,
-             priors_effect_null = NULL,
-             priors_heterogeneity_null = NULL, 
-             priors_effect = prior("normal", 
-                                   parameters = list(mean = 0, 
-                                                     sd = 0.5)),
-             priors_heterogeneity = prior("normal", 
-                                          parameters = list(mean = 0, 
-                                                            sd = 0.25)),
-             priors_bias = list(
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1), 
-                                                      steps = c(0.05))),
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1, 1), 
-                                                      steps = c(0.05, 0.1)))),
-             autofit_control = set_autofit_control(max_Rhat = 1.01,
-                                                   min_ESS = 1000,
-                                                   sample_extend = 1e4),
-             convergence_checks = set_convergence_checks(max_Rhat = 1.01,
-                                                         min_ESS = 1000),
-             parallel = TRUE)
+# Standardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi_s), 
+  se = temp$sei_s, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.3)),
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.25)),
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
 
 summary(fit) #Checks the general results of the ROBMA model
-summary(fit, type = 'model') #Checks the specific results of the ROBMA models we are interested in
+interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
+
+# Unstandardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi), 
+  se = temp$sei, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 5)), # example
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 2.5)), # example
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
+
+summary(fit) #Checks the general results of the ROBMA model
 interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
 
 # IP Unconditionalized
@@ -359,34 +397,52 @@ temp <- nt_ip_dat %>%
 
 # Run the model
 
-fit <- RoBMA(d = temp$yi_s, 
-             se = temp$sei_s, 
-             study_names = temp$plot_citation,
-             seed = 1,
-             priors_effect_null = NULL,
-             priors_heterogeneity_null = NULL, 
-             priors_effect = prior("normal", 
-                                   parameters = list(mean = 0, 
-                                                     sd = 0.5)),
-             priors_heterogeneity = prior("normal", 
-                                          parameters = list(mean = 0, 
-                                                            sd = 0.25)),
-             priors_bias = list(
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1), 
-                                                      steps = c(0.05))),
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1, 1), 
-                                                      steps = c(0.05, 0.1)))),
-             autofit_control = set_autofit_control(max_Rhat = 1.01,
-                                                   min_ESS = 1000,
-                                                   sample_extend = 1e4),
-             convergence_checks = set_convergence_checks(max_Rhat = 1.01,
-                                                         min_ESS = 1000),
-             parallel = TRUE)
+# Standardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi_s), 
+  se = temp$sei_s, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.3)),
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.25)),
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
 
 summary(fit) #Checks the general results of the ROBMA model
-summary(fit, type = 'model') #Checks the specific results of the ROBMA models we are interested in
+interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
+
+# Unstandardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi), 
+  se = temp$sei, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 5)), # example
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 2.5)), # example
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
+
+summary(fit) #Checks the general results of the ROBMA model
 interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
 
 # IP Conditionalized
@@ -396,33 +452,50 @@ temp <- nt_ip_dat %>%
 
 # Run the model
 
-fit <- RoBMA(d = temp$yi_s, 
-             se = temp$sei_s, 
-             study_names = temp$plot_citation,
-             seed = 1,
-             priors_effect_null = NULL,
-             priors_heterogeneity_null = NULL, 
-             priors_effect = prior("normal", 
-                                   parameters = list(mean = 0, 
-                                                     sd = 0.5)),
-             priors_heterogeneity = prior("normal", 
-                                          parameters = list(mean = 0, 
-                                                            sd = 0.25)),
-             priors_bias = list(
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1), 
-                                                      steps = c(0.05))),
-               prior_weightfunction(distribution = "one.sided", 
-                                    parameters = list(alpha = c(1, 1, 1), 
-                                                      steps = c(0.05, 0.1)))),
-             autofit_control = set_autofit_control(max_Rhat = 1.01,
-                                                   min_ESS = 1000,
-                                                   sample_extend = 1e4),
-             convergence_checks = set_convergence_checks(max_Rhat = 1.01,
-                                                         min_ESS = 1000),
-             parallel = TRUE)
+# Standardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi_s), 
+  se = temp$sei_s, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.3)),
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 0.25)),
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
 
 summary(fit) #Checks the general results of the ROBMA model
-summary(fit, type = 'model') #Checks the specific results of the ROBMA models we are interested in
 interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
 
+# Unstandardized Effect Sizes
+
+fit <- RoBMA(
+  y = as.vector(temp$yi), 
+  se = temp$sei, 
+  study_names = temp$plot_citation,
+  seed = 1,
+  priors_effect = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 5)), # example
+  priors_heterogeneity = RoBMA::prior(distribution = "normal", parameters = list(mean = 0, sd = 2.5)), # example
+  priors_heterogeneity_null = NULL,
+  priors_bias = list(
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1),
+                                           steps = c(0.025))),
+    prior_weightfunction(distribution = "one.sided",
+                         parameters = list(alpha = c(1, 1, 1),
+                                           steps = c(0.025, 0.05)))
+  ),
+  parallel = TRUE
+)
+
+summary(fit) #Checks the general results of the ROBMA model
+interpret(fit) #Provides a summary of how the creators of the RoBMA package would interpret our results
