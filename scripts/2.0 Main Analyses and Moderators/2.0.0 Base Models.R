@@ -246,7 +246,7 @@ hypothesis(nt_sp_unc_compdv, 'test_typeSP - test_typeR = 0')
 temp = nt_sp_dat %>% 
   filter(repetitions==max_rep, is_conditionalized!='no') %>%
   mutate(test_type = ifelse(dv=='recall', test_type, 'R')) %>%
-  bind_rows(nt_ip_dat %>% filter(repetitions==max_rep, is_conditionalized!='yes'))
+  bind_rows(nt_ip_dat %>% filter(repetitions==max_rep, is_conditionalized!='no'))
 
 nt_sp_con_compdv <- brm(yi | se(sei) ~ test_type-1 + (test_type-1|id) + (1|es_id),
                         backend='cmdstanr',
